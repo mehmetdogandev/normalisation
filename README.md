@@ -141,16 +141,21 @@ Katkılarınızı bekliyoruz! Lütfen bir pull request göndermeden önce şunla
 3. Değişikliklerinizi commit edin (`git commit -m 'Add amazing feature'`)
 4. Branch'inizi push edin (`git push origin feature/amazing-feature`)
 5. Bir Pull Request açın
-
-## 📜 Lisans
-
-Bu proje MIT Lisansı ile lisanslanmıştır. Daha fazla bilgi için `LICENSE` dosyasına bakın.
-
 ## 📞 İletişim
 
-Mehmet Doğan - [@mehmetdogandev](https://github.com/mehmetdogandev) - mehmetdogan.dev@gmail.com
+Mehmet DOĞAN - [mehmetdogan.dev@gmail.com](mailto:mehmetdogan.dev@gmail.com)
 
-Proje Linki: [https://github.com/mehmetdogandev/normalisation](https://github.com/mehmetdogandev/normalisation)
+Proje Bağlantısı: [https://github.com/mehmetdogandev/imagecription](https://github.com/mehmetdogandev/imagecription)
+
+### Sosyal Medya & Web
+
+- **Website**: [memetdogan.com](https://memetdogan.com)
+- **LinkedIn**: [linkedin.com/in/mehmetdogandev](https://www.linkedin.com/in/mehmetdogandev/)
+- **YouTube**: [youtube.com/@md-kare](https://www.youtube.com/@md-kare)
+
+## 📄 Lisans
+
+Bu proje MIT Lisansı altında lisanslanmıştır. Detaylar için `LICENSE` dosyasına bakınız.
 
 ---
 
