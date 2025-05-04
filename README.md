@@ -11,7 +11,7 @@ CSV ve Excel dosyalarınızdaki verileri akıllı bir şekilde normalize eden we
 
 Bu projenin tanıtım videosunu izlemek için aşağıdaki bağlantıya tıklayabilirsiniz:
 
-[📺 Veri Normalizasyon Aracı Tanıtım Videosu](https://www.youtube.com/watch?v=YOUR_VIDEO_ID)
+[📺 Veri Normalizasyon Aracı Tanıtım Videosu](https://youtu.be/NuyVgOtisrU)
 
 ## 📋 Proje Hakkında
 
