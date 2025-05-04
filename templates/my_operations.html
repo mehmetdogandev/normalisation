@@ -1,0 +1,44 @@
+{% include 'header.html' %}
+
+<main>
+    <div class="container">
+        <div class="operations-section">
+            <h2>İşlem Geçmişim</h2>
+            
+            {% if operations %}
+                <div class="operations-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Orijinal Dosya</th>
+                                <th>Normalize Edilmiş Dosya</th>
+                                <th>İşlem Tarihi</th>
+                                <th>İşlemler</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for operation in operations %}
+                                <tr>
+                                    <td>{{ operation.original_file }}</td>
+                                    <td>{{ operation.normalized_file }}</td>
+                                    <td>{{ operation.operation_date }}</td>
+                                    <td>
+                                        <a href="{{ url_for('download_file', file_path='uploads/' + operation.original_file) }}" class="btn-download"><i class="fas fa-download"></i> Orijinal</a>
+                                        <a href="{{ url_for('download_file', file_path='new_csv/' + operation.normalized_file) }}" class="btn-download"><i class="fas fa-download"></i> Normalize</a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <div class="no-data">
+                    <p>Henüz bir işlem yapmadınız.</p>
+                    <a href="{{ url_for('index') }}" class="btn-primary">İşlem Yap</a>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</main>
+
+{% include 'footer.html' %}

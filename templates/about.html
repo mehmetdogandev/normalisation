@@ -1,0 +1,181 @@
+{% include 'header.html' %}
+<main class="about-page">
+    <div class="about-content">
+        <h2>Veri Normalizasyon Algoritması</h2>
+        <p>Bu uygulama, veri bilimi alanında önemli bir ön işleme adımı olan normalizasyon işlemini gerçekleştirmek için özel bir algoritma kullanmaktadır. Normalizasyon, farklı ölçeklerdeki veri özelliklerini aynı ölçeğe (genellikle 0-1 aralığı) getirerek, makine öğrenmesi algoritmalarının daha etkili çalışmasını sağlar.</p>
+        
+        <div class="algorithm-details">
+            <h3>Normalizasyon İşlemi Nedir?</h3>
+            <p>Normalizasyon, farklı ölçeklerdeki veri kolonlarını standart bir aralığa dönüştüren matematiksel bir işlemdir. Bu sayede büyük değere sahip özellikler, küçük değerlere sahip özellikleri baskılamaz ve makine öğrenmesi modelleri daha dengeli çalışır. Ayrıca veri görselleştirme, istatistiksel analiz ve karşılaştırma işlemlerini de kolaylaştırır.</p>
+            
+            <div class="algorithm-steps">
+                <h4>Algoritmamızın Genel Çalışma Adımları:</h4>
+                <ol>
+                    <li><strong>Dosya Okuma ve Analiz</strong>: Yüklenen CSV veya Excel dosyası okunur ve veri yapısı analiz edilir.</li>
+                    <li><strong>Sayısal Sütun Tespiti</strong>: Normalize edilecek sayısal sütunlar otomatik olarak tespit edilir.</li>
+                    <li><strong>Sınıf Sütunlarının Korunması</strong>: "sınıf", "class", "kategori" gibi kelimeler içeren sütunlar etiket bilgisi olarak değerlendirilir ve normalizasyon dışında tutulur.</li>
+                    <li><strong>Eksik ve Aykırı Değer İşleme</strong>: Sayısal sütunlardaki eksik ve aykırı değerler tespit edilip düzenlenir.</li>
+                    <li><strong>Akıllı Normalizasyon</strong>: Veri dağılımına uygun normalizasyon tekniği otomatik seçilir ve uygulanır.</li>
+                    <li><strong>Kalite Kontrolü</strong>: Normalize edilen verilerin 0-1 aralığında olduğu doğrulanır.</li>
+                    <li><strong>Sonuç Dosyasının Oluşturulması</strong>: Normalize edilmiş veriler, tercih edilen formatta (CSV veya Excel) kaydedilir.</li>
+                </ol>
+            </div>
+            
+            <h3>Detaylı Normalizasyon Süreci</h3>
+            
+            <h4>1. Dosya Okuma ve Analiz (%20)</h4>
+            <p>Yüklenen dosya türüne göre (CSV veya Excel) uygun kütüphaneler kullanılarak dosya okunur:</p>
+            <pre class="code-block">
+# CSV için
+df = pd.read_csv(file_path)
+
+# Excel için 
+df = pd.read_excel(file_path)
+            </pre>
+            <p>Bu aşamada dosya içeriği Pandas DataFrame'e dönüştürülür ve veri yapısı analiz edilir.</p>
+            
+            <h4>2. Sayısal ve Sınıf Sütunlarının Tespiti (%40)</h4>
+            <p>Algoritmamız otomatik olarak sayısal sütunları tespit eder ve string içeren sütunları analiz eder:</p>
+            <pre class="code-block">
+# Sayısal sütunları tespit et
+numeric_columns = df.select_dtypes(include=[np.number]).columns.tolist()
+
+# String sütunlarını bul
+string_columns = df.select_dtypes(include=['object']).columns.tolist()
+
+# Sınıf/kategori kolonlarını belirle
+class_columns = []
+filtered_columns = []
+
+for col in string_columns:
+    # Sütun adında "sınıf", "class", "kategori" gibi anahtar kelimeler varsa koru
+    if any(keyword in col.lower() for keyword in ["class", "sınıf", "kategori", "category", "type", "tip"]):
+        class_columns.append(col)
+    else:
+        filtered_columns.append(col)
+            </pre>
+            
+            <h4>3. Eksik ve Aykırı Değer İşleme (%60)</h4>
+            <p>Sayısal sütunlardaki eksik değerler akıllı bir yaklaşımla doldurulur ve aykırı değerler Winsorization yöntemiyle işlenir:</p>
+            <pre class="code-block">
+for col in numeric_columns:
+    if df[col].isnull().sum() > 0:
+        # Aykırı değerler için alt ve üst sınırlar hesaplanır
+        q1 = df[col].quantile(0.25)
+        q3 = df[col].quantile(0.75)
+        iqr = q3 - q1
+        lower_bound = q1 - 1.5 * iqr
+        upper_bound = q3 + 1.5 * iqr
+        
+        # Uç değerler kırpılır
+        df[col] = df[col].clip(lower_bound, upper_bound)
+        
+        # Eksik değerler medyan ile doldurulur
+        df[col] = df[col].fillna(df[col].median())
+            </pre>
+            
+            <h4>4. Akıllı Normalizasyon Algoritması (%80)</h4>
+            <p>Algoritmamızın en güçlü özelliği, her sütunun veri dağılımını analiz ederek optimal normalizasyon tekniğini otomatik seçmesidir:</p>
+            
+            <h5>a) Pozitif Çarpık Veriler İçin (skewness > 1.0):</h5>
+            <p>Logaritmik Dönüşüm + Sigmoid Fonksiyonu kullanılır:</p>
+            <pre class="code-block">
+# Negatif ve sıfır değerler için ofset ekle
+offset = abs(min_val) + 1 if min_val <= 0 else 0
+
+# Logaritmik normalizasyon ve sigmoid fonksiyonu
+for i, val in enumerate(df[col]):
+    if not pd.isna(val):
+        log_val = np.log1p(val + offset)
+        norm_val = 1 / (1 + np.exp(-log_val))
+        normalized_values[i] = norm_val
+
+# Min-max tekrar ölçekleme
+norm_min, norm_max = np.min(normalized_values), np.max(normalized_values)
+if norm_max > norm_min:
+    normalized_values = (normalized_values - norm_min) / (norm_max - norm_min)
+            </pre>
+            
+            <h5>b) Negatif Çarpık Veriler İçin (skewness < -1.0):</h5>
+            <p>Min-Max Ölçekleme + Trigonometrik Normalizasyon kullanılır:</p>
+            <pre class="code-block">
+# Min-max ölçekleme ve trigonometrik normalizasyon
+for i, val in enumerate(df[col]):
+    if not pd.isna(val):
+        scaled_val = (val - min_val) / range_val if range_val > 0 else 0
+        norm_val = np.sin(scaled_val * np.pi/2)
+        normalized_values[i] = norm_val
+            </pre>
+            
+            <h5>c) Normal Dağılıma Yakın Veriler İçin:</h5>
+            <p>Hibrit yaklaşım - ArcTan fonksiyonu kullanılır:</p>
+            <pre class="code-block">
+# Min-max ölçekleme ve arctan hibrit normalizasyon
+for i, val in enumerate(df[col]):
+    if not pd.isna(val):
+        scaled_val = (val - min_val) / range_val if range_val > 0 else 0
+        norm_val = (np.arctan(scaled_val * 5 - 2.5) / np.pi) + 0.5
+        normalized_values[i] = norm_val
+            </pre>
+            
+            <h4>5. Kalite Kontrol ve Son İşlemler (%90)</h4>
+            <p>Normalize edilen verilerin 0-1 aralığında olduğu kontrol edilir ve gerekirse son bir düzeltme yapılır:</p>
+            <pre class="code-block">
+# 0-1 aralığı kontrolü ve son düzeltme
+for col in numeric_columns:
+    if len(df[col].dropna()) > 0:
+        cur_min = df[col].min()
+        cur_max = df[col].max()
+        
+        # Eğer 0-1 aralığında değilse, son bir ölçekleme yap
+        if cur_min < 0 or cur_max > 1:
+            df[col] = (df[col] - cur_min) / (cur_max - cur_min) if cur_max > cur_min else 0
+            </pre>
+            
+            <h4>6. Normalizasyon Doğruluk Değerlendirmesi ve Tamamlama (%100)</h4>
+            <p>Normalizasyon işleminin başarısı değerlendirilir ve sonuç dosyası oluşturulur:</p>
+            <pre class="code-block">
+# Doğruluk metriği hesapla
+accuracy_scores = []
+for col in numeric_columns:
+    data = df[col].dropna()
+    if len(data) > 0:
+        # 0-1 aralığında olup olmadığını kontrol et
+        in_range = ((data >= 0) & (data <= 1)).mean()
+        accuracy_scores.append(in_range)
+
+avg_accuracy = np.mean(accuracy_scores) if accuracy_scores else 1.0
+
+# Sonuç dosyasını oluştur - format seçimine göre
+if output_format.lower() == 'excel':
+    df.to_excel(output_path, index=False)
+else:
+    df.to_csv(output_path, index=False)
+            </pre>
+        </div>
+        
+        <div class="algorithm-benefits">
+            <h3>Bu Normalizasyon Algoritmasının Avantajları</h3>
+            <ul>
+                <li><strong>Veri Dağılımına Duyarlı</strong>: Farklı veri dağılımlarına farklı normalizasyon teknikleri uygular.</li>
+                <li><strong>Eksik ve Aykırı Değer Koruması</strong>: Veri kaybını ve bozulmayı minimize eder.</li>
+                <li><strong>Otomatik Sütun Seçimi</strong>: Hangi sütunların normalize edileceğini otomatik belirler.</li>
+                <li><strong>Çoklu Format Desteği</strong>: Hem CSV hem de Excel formatlarını destekler.</li>
+                <li><strong>Doğruluk Kontrolü</strong>: Normalizasyon kalitesini değerlendirir ve raporlar.</li>
+            </ul>
+        </div>
+        
+        <div class="use-cases">
+            <h3>Kullanım Alanları</h3>
+            <p>Bu normalizasyon algoritması aşağıdaki alanlarda özellikle faydalıdır:</p>
+            <ul>
+                <li>Makine Öğrenmesi ve Yapay Zeka modellerinde ön işleme</li>
+                <li>İstatistiksel analiz ve karşılaştırma</li>
+                <li>Veri görselleştirme ve grafik oluşturma</li>
+                <li>Çok değişkenli analiz ve kümeleme</li>
+                <li>Anomali tespiti ve özellik çıkarımı</li>
+            </ul>
+        </div>
+    </div>
+</main>
+{% include 'footer.html' %}

@@ -1,0 +1,8 @@
+id,name,age,salary,review_score,tiny_value,large_value
+1,Alice,25,25000,4.5,0.000034,9999999
+2,Bob,45,82000,3.2,0.00012,15000000
+3,Charlie,30,54000,hatalı,0.000005,8000000
+4,Diana,38,120000,4.9,0.000076,12500000
+5,Eva,29,46000,3.5,N/A,11000000
+6,Frank,unknown,38000,2.1,0.00002,12000000
+7,Grace,35,metin,3.8,0.00003,metin

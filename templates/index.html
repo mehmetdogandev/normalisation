@@ -1,0 +1,586 @@
+{% include 'header.html' %}
+
+<main>
+    <div class="upload-section">
+        <h2>Dosya Normalizasyon Aracı</h2>
+        <div class="upload-form">
+            <form id="upload-form" method="POST" enctype="multipart/form-data">
+                <div class="file-upload-container">
+                    <div class="file-upload-area" id="drop-area">
+                        <div class="file-upload-icon">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                        </div>
+                        <div class="file-upload-text">
+                            <p>Dosyanızı buraya sürükleyin veya seçin</p>
+                            <span>Excel veya CSV formatında dosya yükleyebilirsiniz</span>
+                        </div>
+                        <input type="file" id="fileInput" name="file" accept=".csv,.xls,.xlsx" hidden>
+                        <button type="button" class="select-file-btn" id="selectFileBtn">Dosya Seç</button>
+                    </div>
+                    <div class="file-details" id="fileDetails" style="display: none;">
+                        <div class="file-info">
+                            <div class="file-preview">
+                                <i id="fileIcon" class="far"></i>
+                            </div>
+                            <div class="file-meta">
+                                <h4 id="fileName">dosya_adi.csv</h4>
+                                <p id="fileSize">0 KB</p>
+                            </div>
+                        </div>
+                        <div class="file-actions">
+                            <button type="button" class="file-remove-btn" id="removeFileBtn">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="file-format-selection" id="formatSelection" style="display: none;">
+                    <h3>Dosya Formatı Seçin</h3>
+                    <div class="format-options">
+                        <div class="format-option">
+                            <input type="radio" id="formatCsv" name="fileFormat" value="csv" checked>
+                            <label for="formatCsv">
+                                <i class="fas fa-file-csv"></i>
+                                <span>CSV</span>
+                            </label>
+                        </div>
+                        <div class="format-option">
+                            <input type="radio" id="formatExcel" name="fileFormat" value="excel">
+                            <label for="formatExcel">
+                                <i class="fas fa-file-excel"></i>
+                                <span>Excel</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="firstName">Adınız:</label>
+                    <input type="text" id="firstName" name="firstName" value="{{ session.full_name.split()[0] if session.full_name else '' }}" required>
+                </div>
+                <div class="form-group">
+                    <label for="lastName">Soyadınız:</label>
+                    <input type="text" id="lastName" name="lastName" value="{{ session.full_name.split()[1] if session.full_name and ' ' in session.full_name else '' }}" required>
+                </div>
+                <button type="submit" class="btn-primary" id="submitBtn" disabled>Normalizasyon İşlemini Başlat</button>
+            </form>
+        </div>
+        
+        <div id="loading-container" class="loading-container" style="display: none;">
+            <p>Normalizasyon işlemi uygulanıyor...</p>
+            <div class="progress-bar">
+                <div class="progress" id="progress-bar"></div>
+            </div>
+            <p id="progress-status">0%</p>
+        </div>
+        
+        <div id="result-container" class="result-container" style="display: none;">
+            <p>Normalizasyon işlemi tamamlandı!</p>
+            <a id="download-link" class="btn-download">Güncellenmiş normalizasyon dosyanızı indirin</a>
+        </div>
+    </div>
+    
+    <div class="history-section">
+        <h2>Son Yapılan İşlemler</h2>
+        <div class="history-tables">
+            <div class="uploaded-files">
+                <h3>Yüklenen Dosyalar</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Ad Soyad</th>
+                            <th>Dosya Adı</th>
+                            <th>Format</th>
+                            <th>Tarih</th>
+                            <th>İşlem</th>
+                        </tr>
+                    </thead>
+                    <tbody id="uploaded-files-list">
+                        {% for file in uploaded_files %}
+                        <tr>
+                            <td>{{ file.user_name }}</td>
+                            <td title="{{ file.file_name }}" class="truncated-filename">
+                                {{ file.file_name[:11] }}{% if file.file_name|length > 11 %}...{% endif %}
+                            </td>
+                            <td>
+                                {% if file.file_name.endswith('.csv') %}
+                                <span class="file-format csv"><i class="fas fa-file-csv"></i> CSV</span>
+                                {% elif file.file_name.endswith('.xlsx') or file.file_name.endswith('.xls') %}
+                                <span class="file-format excel"><i class="fas fa-file-excel"></i> Excel</span>
+                                {% else %}
+                                <span class="file-format"><i class="fas fa-file"></i> Bilinmeyen</span>
+                                {% endif %}
+                            </td>
+                            <td>{{ file.date }}</td>
+                            <td><a href="{{ file.download_url }}" class="btn-download"><i class="fas fa-download"></i></a></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <!-- Sayfalama bölümü otomatik olarak buraya eklenecek -->
+            </div>
+            
+            <div class="normalized-files">
+                <h3>Güncellenmiş Dosyalar</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Ad Soyad</th>
+                            <th>Dosya Adı</th>
+                            <th>Format</th>
+                            <th>Tarih</th>
+                            <th>İşlem</th>
+                        </tr>
+                    </thead>
+                    <tbody id="normalized-files-list">
+                        {% for file in normalized_files %}
+                        <tr>
+                            <td>{{ file.user_name }}</td>
+                            <td title="{{ file.file_name }}" class="truncated-filename">
+                                {{ file.file_name[:11] }}{% if file.file_name|length > 11 %}...{% endif %}
+                            </td>
+                            <td>
+                                {% if file.file_name.endswith('.csv') %}
+                                <span class="file-format csv"><i class="fas fa-file-csv"></i> CSV</span>
+                                {% elif file.file_name.endswith('.xlsx') or file.file_name.endswith('.xls') %}
+                                <span class="file-format excel"><i class="fas fa-file-excel"></i> Excel</span>
+                                {% else %}
+                                <span class="file-format"><i class="fas fa-file"></i> Bilinmeyen</span>
+                                {% endif %}
+                            </td>
+                            <td>{{ file.date }}</td>
+                            <td><a href="{{ file.download_url }}" class="btn-download"><i class="fas fa-download"></i></a></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <!-- Sayfalama bölümü otomatik olarak buraya eklenecek -->
+            </div>
+        </div>
+    </div>
+</main>
+
+<!-- CSS Eklentileri -->
+<style>
+/* Kısaltılmış dosya adları için stil */
+.truncated-filename {
+    max-width: 150px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    cursor: help;
+    position: relative;
+}
+
+.truncated-filename:hover {
+    color: #3498db;
+    text-decoration: underline dotted;
+}
+
+/* Tooltip stilini özelleştirme */
+.truncated-filename:hover::after {
+    content: attr(title);
+    position: absolute;
+    left: 0;
+    top: 100%;
+    z-index: 100;
+    background-color: rgba(52, 73, 94, 0.95);
+    color: white;
+    padding: 8px 12px;
+    border-radius: 4px;
+    font-size: 13px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    min-width: 200px;
+    max-width: 300px;
+    white-space: normal;
+    word-wrap: break-word;
+    display: none;
+}
+
+/* Mobil için tooltip desteği */
+@media (min-width: 768px) {
+    .truncated-filename:hover::after {
+        display: block;
+    }
+}
+
+/* Dosya Format Göstergeleri */
+.file-format {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    background-color: #f8f9fa;
+    color: #495057;
+}
+
+.file-format i {
+    margin-right: 5px;
+    font-size: 1rem;
+}
+
+.file-format.csv {
+    background-color: rgba(231, 76, 60, 0.1);
+    color: #e74c3c;
+    border: 1px solid rgba(231, 76, 60, 0.2);
+}
+
+.file-format.excel {
+    background-color: rgba(39, 174, 96, 0.1);
+    color: #27ae60;
+    border: 1px solid rgba(39, 174, 96, 0.2);
+}
+
+/* Pagination Stillemeleri */
+.pagination-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 20px 0;
+    flex-wrap: wrap;
+    gap: 5px;
+}
+
+.pagination-btn {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    min-width: 36px;
+    height: 36px;
+    padding: 0 8px;
+    margin: 0 2px;
+    border-radius: 4px;
+    background-color: #f8f9fa;
+    color: #495057;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    border: 1px solid #e9ecef;
+}
+
+.pagination-btn:hover {
+    background-color: #e9ecef;
+    color: #212529;
+}
+
+.pagination-btn.active {
+    background-color: #3498db;
+    color: white;
+    border-color: #3498db;
+}
+
+.pagination-btn.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+.pagination-btn.prev,
+.pagination-btn.next {
+    background-color: #fff;
+    border: 1px solid #e9ecef;
+}
+
+.pagination-btn.prev:hover,
+.pagination-btn.next:hover {
+    background-color: #f8f9fa;
+}
+
+.pagination-ellipsis {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    min-width: 36px;
+    height: 36px;
+    font-size: 14px;
+    color: #6c757d;
+}
+
+/* Mobil için duyarlı tasarım */
+@media (max-width: 576px) {
+    .pagination-container {
+        margin: 15px 0;
+    }
+    
+    .pagination-btn {
+        min-width: 32px;
+        height: 32px;
+        font-size: 13px;
+    }
+    
+    /* Mobil görünümde bazı sayfa numaralarını gizle */
+    .pagination-btn:not(.active):not(.prev):not(.next):not(:nth-child(2)):not(:last-child-2) {
+        display: none;
+    }
+}
+
+/* Pagination konteynerlerini tablo ile hizala */
+.uploaded-files, .normalized-files {
+    position: relative;
+}
+
+#uploaded-files-pagination, #normalized-files-pagination {
+    width: 100%;
+    margin-top: 10px;
+}
+
+/* Tabloda satır yüksekliği ayarlaması */
+#uploaded-files-list tr, #normalized-files-list tr {
+    transition: display 0.3s ease;
+}
+</style>
+
+<!-- JavaScript Eklentileri -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // JavaScript'in diğer kısımları burada...
+    
+    // Dosya adını kısaltan fonksiyon
+    function truncateFileName(fileName, maxLength = 11) {
+        if (fileName.length <= maxLength) {
+            return fileName;
+        }
+        return fileName.substring(0, maxLength) + '...';
+    }
+
+    // Tabloları güncelleme fonksiyonu
+    function updateFilesTable(uploadedFile, normalizedFile) {
+        // Yüklenen dosyalar tablosunu güncelle
+        const uploadedFilesList = document.getElementById('uploaded-files-list');
+        if (uploadedFilesList && uploadedFile) {
+            const fileFormat = getFileFormatHtml(uploadedFile.file_name);
+            const uploadedRow = document.createElement('tr');
+            const truncatedName = truncateFileName(uploadedFile.file_name);
+            
+            uploadedRow.innerHTML = `
+                <td>${uploadedFile.user_name}</td>
+                <td title="${uploadedFile.file_name}" class="truncated-filename">${truncatedName}</td>
+                <td>${fileFormat}</td>
+                <td>${uploadedFile.date}</td>
+                <td><a href="${uploadedFile.download_url}" class="btn-download"><i class="fas fa-download"></i></a></td>
+            `;
+            uploadedFilesList.prepend(uploadedRow);
+        }
+        
+        // Normalize edilmiş dosyalar tablosunu güncelle
+        const normalizedFilesList = document.getElementById('normalized-files-list');
+        if (normalizedFilesList && normalizedFile) {
+            const fileFormat = getFileFormatHtml(normalizedFile.file_name);
+            const normalizedRow = document.createElement('tr');
+            const truncatedName = truncateFileName(normalizedFile.file_name);
+            
+            normalizedRow.innerHTML = `
+                <td>${normalizedFile.user_name}</td>
+                <td title="${normalizedFile.file_name}" class="truncated-filename">${truncatedName}</td>
+                <td>${fileFormat}</td>
+                <td>${normalizedFile.date}</td>
+                <td><a href="${normalizedFile.download_url}" class="btn-download"><i class="fas fa-download"></i></a></td>
+            `;
+            normalizedFilesList.prepend(normalizedRow);
+        }
+    }
+
+    // Dosya formatına göre HTML oluştur
+    function getFileFormatHtml(fileName) {
+        const fileExtension = fileName.split('.').pop().toLowerCase();
+        
+        if (fileExtension === 'csv') {
+            return '<span class="file-format csv"><i class="fas fa-file-csv"></i> CSV</span>';
+        } else if (['xlsx', 'xls'].includes(fileExtension)) {
+            return '<span class="file-format excel"><i class="fas fa-file-excel"></i> Excel</span>';
+        } else {
+            return '<span class="file-format"><i class="fas fa-file"></i> Bilinmeyen</span>';
+        }
+    }
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Pagination için gerekli değişkenler
+    const itemsPerPage = 5;
+    
+    // Her tablo için ayrı currentPage değişkeni tutuyoruz
+    const paginationState = {
+        'uploaded-files-list': 1,   // Yüklenen dosyalar için sayfa
+        'normalized-files-list': 1  // Normalize edilmiş dosyalar için sayfa
+    };
+    
+    // Her iki tablo için sayfalama işlevini uygula
+    setupPagination('uploaded-files-list', 'uploaded-files-pagination');
+    setupPagination('normalized-files-list', 'normalized-files-pagination');
+    
+    // Sayfalama işlevini kurar
+    function setupPagination(tableId, paginationContainerId) {
+        const tableBody = document.getElementById(tableId);
+        if (!tableBody) return;
+        
+        // Sayfalama konteynerini oluştur
+        const table = tableBody.closest('table');
+        if (!table) return;
+        
+        // Eğer zaten var olan bir sayfalama konteyneri varsa temizle
+        let existingPagination = document.getElementById(paginationContainerId);
+        if (existingPagination) {
+            existingPagination.remove();
+        }
+        
+        // Yeni pagination konteynerini oluştur
+        const paginationContainer = document.createElement('div');
+        paginationContainer.id = paginationContainerId;
+        paginationContainer.className = 'pagination-container';
+        table.parentNode.insertBefore(paginationContainer, table.nextSibling);
+        
+        // Tabloyu sayfalandır
+        paginateTable(tableId, paginationContainerId);
+        
+        // Sayfa butonları için olay dinleyicileri ekle
+        paginationContainer.addEventListener('click', function(e) {
+            if (e.target.tagName === 'A' || e.target.parentElement.tagName === 'A') {
+                e.preventDefault();
+                
+                let button = e.target;
+                if (e.target.tagName !== 'A') {
+                    button = e.target.parentElement;
+                }
+                
+                // Disabled butonları atla
+                if (button.classList.contains('disabled')) return;
+                
+                const href = button.getAttribute('href');
+                const pageNum = parseInt(href.replace('#page-', ''));
+                
+                if (!isNaN(pageNum)) {
+                    paginationState[tableId] = pageNum;
+                    paginateTable(tableId, paginationContainerId);
+                }
+            }
+        });
+    }
+    
+    // Belirtilen tabloyu sayfalandırır
+    function paginateTable(tableId, paginationContainerId) {
+        const tableBody = document.getElementById(tableId);
+        const paginationContainer = document.getElementById(paginationContainerId);
+        const currentPage = paginationState[tableId];
+        
+        if (!tableBody || !paginationContainer) return;
+        
+        const rows = Array.from(tableBody.querySelectorAll('tr'));
+        const totalPages = Math.ceil(rows.length / itemsPerPage);
+        
+        // Tüm satırları gizle
+        rows.forEach(row => {
+            row.style.display = 'none';
+        });
+        
+        // Sadece mevcut sayfadaki satırları göster
+        const startIndex = (currentPage - 1) * itemsPerPage;
+        const endIndex = Math.min(startIndex + itemsPerPage, rows.length);
+        
+        for (let i = startIndex; i < endIndex; i++) {
+            if (rows[i]) {
+                rows[i].style.display = '';
+            }
+        }
+        
+        // Sayfalama butonlarını oluştur
+        createPaginationButtons(paginationContainer, totalPages, currentPage);
+    }
+    
+    // Sayfalama butonlarını oluşturur
+    function createPaginationButtons(container, totalPages, currentPage) {
+        container.innerHTML = '';
+        
+        if (totalPages <= 1) {
+            return; // Sadece bir sayfa varsa butonları gösterme
+        }
+        
+        // Önceki sayfa butonu
+        const prevButton = document.createElement('a');
+        prevButton.href = `#page-${Math.max(1, currentPage - 1)}`;
+        prevButton.className = 'pagination-btn prev' + (currentPage === 1 ? ' disabled' : '');
+        prevButton.innerHTML = '<i class="fas fa-chevron-left"></i>';
+        prevButton.setAttribute('aria-label', 'Önceki sayfa');
+        container.appendChild(prevButton);
+        
+        // Sayfa numaraları
+        const maxVisiblePages = 5;
+        let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
+        let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
+        
+        // Başlangıç ve bitiş sayfalarını ayarla
+        if (endPage - startPage + 1 < maxVisiblePages) {
+            startPage = Math.max(1, endPage - maxVisiblePages + 1);
+        }
+        
+        // İlk sayfa butonu (eğer gerekirse)
+        if (startPage > 1) {
+            const firstButton = document.createElement('a');
+            firstButton.href = '#page-1';
+            firstButton.className = 'pagination-btn';
+            firstButton.textContent = '1';
+            container.appendChild(firstButton);
+            
+            if (startPage > 2) {
+                const ellipsis = document.createElement('span');
+                ellipsis.className = 'pagination-ellipsis';
+                ellipsis.textContent = '...';
+                container.appendChild(ellipsis);
+            }
+        }
+        
+        // Sayfa numaralarını oluştur
+        for (let i = startPage; i <= endPage; i++) {
+            const pageButton = document.createElement('a');
+            pageButton.href = `#page-${i}`;
+            pageButton.className = 'pagination-btn' + (i === currentPage ? ' active' : '');
+            pageButton.textContent = i;
+            container.appendChild(pageButton);
+        }
+        
+        // Son sayfa butonu (eğer gerekirse)
+        if (endPage < totalPages) {
+            if (endPage < totalPages - 1) {
+                const ellipsis = document.createElement('span');
+                ellipsis.className = 'pagination-ellipsis';
+                ellipsis.textContent = '...';
+                container.appendChild(ellipsis);
+            }
+            
+            const lastButton = document.createElement('a');
+            lastButton.href = `#page-${totalPages}`;
+            lastButton.className = 'pagination-btn';
+            lastButton.textContent = totalPages;
+            container.appendChild(lastButton);
+        }
+        
+        // Sonraki sayfa butonu
+        const nextButton = document.createElement('a');
+        nextButton.href = `#page-${Math.min(totalPages, currentPage + 1)}`;
+        nextButton.className = 'pagination-btn next' + (currentPage === totalPages ? ' disabled' : '');
+        nextButton.innerHTML = '<i class="fas fa-chevron-right"></i>';
+        nextButton.setAttribute('aria-label', 'Sonraki sayfa');
+        container.appendChild(nextButton);
+    }
+    
+    // Yeni veri eklendiğinde sayfalamayı güncelleme fonksiyonu - Global olarak erişilebilir
+    window.updatePagination = function() {
+        setupPagination('uploaded-files-list', 'uploaded-files-pagination');
+        setupPagination('normalized-files-list', 'normalized-files-pagination');
+    };
+    
+    // Mevcut updateFilesTable fonksiyonunu genişlet - Global olarak erişilebilir
+    const originalUpdateFilesTable = window.updateFilesTable;
+    if (typeof originalUpdateFilesTable === 'function') {
+        window.updateFilesTable = function(uploadedFile, normalizedFile) {
+            originalUpdateFilesTable(uploadedFile, normalizedFile);
+            window.updatePagination();
+        };
+    }
+});
+</script>
+
+{% include 'footer.html' %}

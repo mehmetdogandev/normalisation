@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kullanıcı Detayları - Yönetici Paneli</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        .admin-header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 20px 0;
+            margin-bottom: 30px;
+        }
+        
+        .admin-header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .admin-title h1 {
+            font-size: 1.8rem;
+            margin: 0;
+        }
+        
+        .admin-actions {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .admin-btn {
+            background-color: rgba(52, 152, 219, 0.8);
+            color: white;
+            text-decoration: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+            display: inline-flex;
+            align-items: center;
+            transition: all 0.3s;
+        }
+        
+        .admin-btn i {
+            margin-right: 5px;
+        }
+        
+        .admin-btn:hover {
+            background-color: rgba(41, 128, 185, 0.9);
+            transform: translateY(-2px);
+        }
+        
+        .admin-container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .admin-panel {
+            background-color: white;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+        
+        .admin-panel h2 {
+            color: #2c3e50;
+            margin-top: 0;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #ecf0f1;
+        }
+        
+        .user-info {
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .user-info .info-row {
+            display: flex;
+            margin-bottom: 10px;
+        }
+        
+        .user-info .info-label {
+            width: 150px;
+            font-weight: 600;
+            color: #34495e;
+        }
+        
+        .user-info .info-value {
+            flex: 1;
+        }
+        
+        .user-role {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        
+        .role-admin {
+            background-color: rgba(231, 76, 60, 0.2);
+            color: #c0392b;
+        }
+        
+        .role-user {
+            background-color: rgba(52, 152, 219, 0.2);
+            color: #2980b9;
+        }
+        
+        .admin-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .admin-table th, .admin-table td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #ecf0f1;
+        }
+        
+        .admin-table th {
+            background-color: #f8f9fa;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        
+        .admin-table tr:hover {
+            background-color: #f8f9fa;
+        }
+        
+        .file-type {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        
+        .type-uploaded {
+            background-color: rgba(52, 152, 219, 0.2);
+            color: #2980b9;
+        }
+        
+        .type-normalized {
+            background-color: rgba(46, 204, 113, 0.2);
+            color: #27ae60;
+        }
+        
+        .btn-download {
+            display: inline-block;
+            background-color: rgba(52, 152, 219, 0.8);
+            color: white;
+            text-decoration: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+        }
+        
+        .btn-download:hover {
+            background-color: rgba(41, 128, 185, 0.9);
+            transform: translateY(-2px);
+        }
+        
+        .file-icon {
+            width: 24px;
+            height: 24px;
+            vertical-align: middle;
+            margin-right: 5px;
+        }
+        
+        .flash-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 9999;
+            max-width: 400px;
+        }
+        
+        .tabs {
+            display: flex;
+            margin-bottom: 20px;
+        }
+        
+        .tab {
+            padding: 10px 20px;
+            background-color: #f8f9fa;
+            border: 1px solid #ecf0f1;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .tab:first-child {
+            border-top-left-radius: 5px;
+            border-bottom-left-radius: 5px;
+        }
+        
+        .tab:last-child {
+            border-top-right-radius: 5px;
+            border-bottom-right-radius: 5px;
+        }
+        
+        .tab.active {
+            background-color: #3498db;
+            color: white;
+            border-color: #3498db;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .no-data {
+            text-align: center;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-radius: 5px;
+            color: #7f8c8d;
+        }
+    </style>
+</head>
+<body>
+    <div class="ai-background">
+    <video autoplay muted loop id="background-video">
+        <source src="{{ url_for('static', filename='videos/arkaplan.mp4') }}" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+</div>
+    
+    <div class="flash-container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            <div class="flash-messages">
+              {% for category, message in messages %}
+                <div class="flash-message flash-{{ category }}">
+                  {{ message }}
+                  <span class="close-flash">&times;</span>
+                </div>
+              {% endfor %}
+            </div>
+          {% endif %}
+        {% endwith %}
+    </div>
+    
+    <header class="admin-header">
+        <div class="admin-header-container">
+            <div class="admin-title">
+                <h1>Kullanıcı Detayları</h1>
+            </div>
+            <div class="admin-actions">
+                <a href="{{ url_for('admin_dashboard') }}" class="admin-btn">
+                    <i class="fas fa-arrow-left"></i> Geri Dön
+                </a>
+                <a href="{{ url_for('index') }}" class="admin-btn">
+                    <i class="fas fa-home"></i> Ana Sayfa
+                </a>
+                <a href="{{ url_for('logout') }}" class="admin-btn">
+                    <i class="fas fa-sign-out-alt"></i> Çıkış
+                </a>
+            </div>
+        </div>
+    </header>
+    
+    <div class="admin-container">
+        <div class="admin-panel">
+            <h2>Kullanıcı Bilgileri</h2>
+            
+            <div class="user-info">
+                <div class="info-row">
+                    <div class="info-label">Kullanıcı ID:</div>
+                    <div class="info-value">{{ user.id }}</div>
+                </div>
+                
+                <div class="info-row">
+                    <div class="info-label">Kullanıcı Adı:</div>
+                    <div class="info-value">{{ user.username }}</div>
+                </div>
+                
+                <div class="info-row">
+                    <div class="info-label">Ad Soyad:</div>
+                    <div class="info-value">{{ user.full_name }}</div>
+                </div>
+                
+                <div class="info-row">
+                    <div class="info-label">E-posta:</div>
+                    <div class="info-value">{{ user.email }}</div>
+                </div>
+                
+                <div class="info-row">
+                    <div class="info-label">Rol:</div>
+                    <div class="info-value">
+                        <span class="user-role {% if user.role == 'admin' %}role-admin{% else %}role-user{% endif %}">
+                            {{ user.role }}
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="info-row">
+                    <div class="info-label">Kayıt Tarihi:</div>
+                    <div class="info-value">{{ user.registration_date }}</div>
+                </div>
+            </div>
+            
+            <div class="tabs">
+                <div class="tab active" data-tab="operations">İşlem Geçmişi</div>
+                <div class="tab" data-tab="files">Dosyalar</div>
+            </div>
+            
+            <div class="tab-content active" id="operations-tab">
+                <h3>İşlem Geçmişi</h3>
+                
+                {% if operations %}
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Orijinal Dosya</th>
+                                <th>Normalize Edilmiş Dosya</th>
+                                <th>İşlem Tarihi</th>
+                                <th>İşlemler</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for operation in operations %}
+                                <tr>
+                                    <td>{{ operation.id }}</td>
+                                    <td>{{ operation.original_file }}</td>
+                                    <td>{{ operation.normalized_file }}</td>
+                                    <td>{{ operation.operation_date }}</td>
+                                    <td>
+                                        <a href="{{ url_for('admin_download_file', file_path='uploads/' + operation.original_file) }}" class="btn-download">
+                                            <i class="fas fa-download"></i> Orijinal
+                                        </a>
+                                        <a href="{{ url_for('admin_download_file', file_path='new_csv/' + operation.normalized_file) }}" class="btn-download">
+                                            <i class="fas fa-download"></i> Normalize
+                                        </a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                {% else %}
+                    <div class="no-data">
+                        <p>Bu kullanıcının henüz bir işlem geçmişi bulunmuyor.</p>
+                    </div>
+                {% endif %}
+            </div>
+            
+            <div class="tab-content" id="files-tab">
+                <h3>Kullanıcı Dosyaları</h3>
+                
+                {% if files %}
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>Dosya Türü</th>
+                                <th>Dosya Adı</th>
+                                <th>Tarih</th>
+                                <th>İşlemler</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for file in files %}
+                                <tr>
+                                    <td>
+                                        <span class="file-type {% if file.type == 'uploaded' %}type-uploaded{% else %}type-normalized{% endif %}">
+                                            {% if file.type == 'uploaded' %}
+                                                <i class="fas fa-file-upload"></i> Yüklenen
+                                            {% else %}
+                                                <i class="fas fa-file-export"></i> Normalize
+                                            {% endif %}
+                                        </span>
+                                    </td>
+                                    <td>{{ file.file_name }}</td>
+                                    <td>{{ file.date }}</td>
+                                    <td>
+                                        <a href="{{ file.download_url }}" class="btn-download">
+                                            <i class="fas fa-download"></i> İndir
+                                        </a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                {% else %}
+                    <div class="no-data">
+                        <p>Bu kullanıcının henüz bir dosyası bulunmuyor.</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Tab değiştirme işlevi
+        document.addEventListener('DOMContentLoaded', function() {
+            const tabs = document.querySelectorAll('.tab');
+            const tabContents = document.querySelectorAll('.tab-content');
+            
+            tabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    const tabId = this.getAttribute('data-tab');
+                    
+                    // Tüm sekmeleri deaktif et
+                    tabs.forEach(t => t.classList.remove('active'));
+                    tabContents.forEach(c => c.classList.remove('active'));
+                    
+                    // Seçilen sekmeyi aktif et
+                    this.classList.add('active');
+                    document.getElementById(tabId + '-tab').classList.add('active');
+                });
+            });
+            
+            // Flash mesajlarını kapatma
+            const closeButtons = document.querySelectorAll('.close-flash');
+            
+            closeButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const flashMessage = this.parentElement;
+                    flashMessage.style.opacity = '0';
+                    setTimeout(() => {
+                        flashMessage.style.display = 'none';
+                    }, 300);
+                });
+            });
+            
+            // Otomatik kapanma
+            const flashMessages = document.querySelectorAll('.flash-message');
+            flashMessages.forEach(message => {
+                setTimeout(() => {
+                    message.style.opacity = '0';
+                    setTimeout(() => {
+                        message.style.display = 'none';
+                    }, 300);
+                }, 5000);
+            });
+        });
+    </script>
+</body>
+</html>

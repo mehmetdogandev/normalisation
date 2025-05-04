@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Normalizasyon Uygulaması</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="ai-background">
+    <video autoplay muted loop id="background-video">
+        <source src="{{ url_for('static', filename='videos/arkaplan.mp4') }}" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+</div>
+
+    <div id="page-loader" class="page-loader">
+        <div class="loader-circle"></div>
+        <div class="loading-text">
+            <span>L</span>
+            <span>o</span>
+            <span>a</span>
+            <span>d</span>
+            <span>i</span>
+            <span>n</span>
+            <span>g</span>
+            <span>.</span>
+            <span>.</span>
+            <span>.</span>
+        </div>
+    </div>
+
+    <header>
+        <div class="header-container">
+            <div class="logo-area">
+                <h1 class="logo">MD² ~ SOFT</h1>
+            </div>
+
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="{{ url_for('index') }}" class="nav-link">Anasayfa</a></li>
+                    <li><a href="{{ url_for('about') }}" class="nav-link">Algoritma Hakkında</a></li>
+                    <li><a href="{{ url_for('my_operations') }}" class="nav-link">İşlem Geçmişim</a></li>
+                </ul>
+            </nav>
+
+            <div class="user-section">
+                {% if session.user_id %}
+                    <span class="user-greeting">Merhaba, {{ session.full_name }}</span>
+                    <a href="{{ url_for('logout') }}" class="btn-logout"><i class="fas fa-sign-out-alt"></i> Çıkış</a>
+                {% else %}
+                    <a href="{{ url_for('login') }}" class="btn-login"><i class="fas fa-sign-in-alt"></i> Giriş</a>
+                    <a href="{{ url_for('register') }}" class="btn-register"><i class="fas fa-user-plus"></i> Kayıt</a>
+                {% endif %}
+            </div>
+        </div>
+    </header>
+
+    <div class="flash-container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            <div class="flash-messages">
+              {% for category, message in messages %}
+                <div class="flash-message flash-{{ category }}">
+                  {{ message }}
+                  <span class="close-flash">&times;</span>
+                </div>
+              {% endfor %}
+            </div>
+          {% endif %}
+        {% endwith %}
+    </div>
+
+    <div class="container">
