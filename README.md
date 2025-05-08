@@ -35,13 +35,13 @@ Bu proje, veri bilimi ve makine öğrenmesi projelerinde sıkça kullanılan nor
 ![Kayıt Ol Sayfası](/static/images/register.png)
 
 ### Dosya Yükleme ve Normalizasyon Arayüzü
-![Dosya Normalizasyon Aracı](/static/images/)
+![Dosya Normalizasyon Aracı](/static/images/user-home-page.png)
 
 ### Normalizasyon Algoritması Bilgi Sayfası
-![Veri Normalizasyon Algoritması](/static/images/)
+![Veri Normalizasyon Algoritması](/static/images/aboot-page.png)
 
 ### Yönetici Paneli - Kullanıcı Listesi
-![Yönetici Paneli](/static/images/)
+![Yönetici Paneli](/static/images/admin-home-page.png)
 
 ### ✨ Özellikler
 
