@@ -18,31 +18,42 @@ Bu projenin tanıtım videosunu izlemek için aşağıdaki bağlantıya tıklaya
 Bu proje, veri bilimi ve makine öğrenmesi projelerinde sıkça kullanılan normalizasyon işlemini otomatikleştiren bir web uygulamasıdır. Algoritma, veri setinizin dağılımını analiz ederek en uygun normalizasyon tekniğini seçer ve uygular.
 
 ## 🖼️ Ekran Görüntüleri
+## 🖼️ Ekran Görüntüleri
 
-### Giriş Ekranı
-![Giriş Ekranı](/static/images/login.png)
-
-### Kullanıcı Detayları Sayfası
-![Kullanıcı Detayları](/static/images/aboot-page.png)
-
-### İşlem Geçmişi Sayfası
-![İşlem Geçmişi](/static/images/All-transactions-made-page.png)
-
-### Giriş Sayfası
-![Giriş Sayfası](/static/images/user-home-page.png)
-
-### Kayıt Ol Sayfası
-![Kayıt Ol Sayfası](/static/images/register.png)
-
-### Dosya Yükleme ve Normalizasyon Arayüzü
-![Dosya Normalizasyon Aracı](/static/images/user-home-page.png)
-
-### Normalizasyon Algoritması Bilgi Sayfası
-![Veri Normalizasyon Algoritması](/static/images/aboot-page.png)
-
-### Yönetici Paneli - Kullanıcı Listesi
-![Yönetici Paneli](/static/images/admin-home-page.png)
-
+<div style="display: flex; flex-wrap: wrap; gap: 10px; justify-content: center">
+  <div style="flex: 0 0 45%; max-width: 45%; text-align: center">
+    <img src="/static/images/login.png" alt="Giriş Ekranı" style="width: 100%; border-radius: 5px;">
+    <p><strong>Giriş Ekranı</strong></p>
+  </div>
+  <div style="flex: 0 0 45%; max-width: 45%; text-align: center">
+    <img src="/static/images/aboot-page.png" alt="Kullanıcı Detayları" style="width: 100%; border-radius: 5px;">
+    <p><strong>Kullanıcı Detayları Sayfası</strong></p>
+  </div>
+  <div style="flex: 0 0 45%; max-width: 45%; text-align: center">
+    <img src="/static/images/All-transactions-made-page.png" alt="İşlem Geçmişi" style="width: 100%; border-radius: 5px;">
+    <p><strong>İşlem Geçmişi Sayfası</strong></p>
+  </div>
+  <div style="flex: 0 0 45%; max-width: 45%; text-align: center">
+    <img src="/static/images/user-home-page.png" alt="Giriş Sayfası" style="width: 100%; border-radius: 5px;">
+    <p><strong>Giriş Sayfası</strong></p>
+  </div>
+  <div style="flex: 0 0 45%; max-width: 45%; text-align: center">
+    <img src="/static/images/register.png" alt="Kayıt Ol Sayfası" style="width: 100%; border-radius: 5px;">
+    <p><strong>Kayıt Ol Sayfası</strong></p>
+  </div>
+  <div style="flex: 0 0 45%; max-width: 45%; text-align: center">
+    <img src="/static/images/user-home-page.png" alt="Dosya Normalizasyon Aracı" style="width: 100%; border-radius: 5px;">
+    <p><strong>Dosya Yükleme ve Normalizasyon Arayüzü</strong></p>
+  </div>
+  <div style="flex: 0 0 45%; max-width: 45%; text-align: center">
+    <img src="/static/images/aboot-page.png" alt="Veri Normalizasyon Algoritması" style="width: 100%; border-radius: 5px;">
+    <p><strong>Normalizasyon Algoritması Bilgi Sayfası</strong></p>
+  </div>
+  <div style="flex: 0 0 45%; max-width: 45%; text-align: center">
+    <img src="/static/images/admin-home-page.png" alt="Yönetici Paneli" style="width: 100%; border-radius: 5px;">
+    <p><strong>Yönetici Paneli - Kullanıcı Listesi</strong></p>
+  </div>
+</div>
 ### ✨ Özellikler
 
 - **Akıllı Normalizasyon Algoritması**: Veri dağılımına göre optimize edilmiş normalizasyon tekniği seçimi
