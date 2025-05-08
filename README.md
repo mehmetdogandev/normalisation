@@ -18,7 +18,6 @@ Bu projenin tanıtım videosunu izlemek için aşağıdaki bağlantıya tıklaya
 Bu proje, veri bilimi ve makine öğrenmesi projelerinde sıkça kullanılan normalizasyon işlemini otomatikleştiren bir web uygulamasıdır. Algoritma, veri setinizin dağılımını analiz ederek en uygun normalizasyon tekniğini seçer ve uygular.
 
 ## 🖼️ Ekran Görüntüleri
-## 🖼️ Ekran Görüntüleri
 
 <table>
   <tr>
