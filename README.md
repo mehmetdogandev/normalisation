@@ -20,40 +20,24 @@ Bu proje, veri bilimi ve makine öğrenmesi projelerinde sıkça kullanılan nor
 ## 🖼️ Ekran Görüntüleri
 ## 🖼️ Ekran Görüntüleri
 
-<div style="display: flex; flex-wrap: wrap; gap: 10px; justify-content: center">
-  <div style="flex: 0 0 45%; max-width: 45%; text-align: center">
-    <img src="/static/images/login.png" alt="Giriş Ekranı" style="width: 100%; border-radius: 5px;">
-    <p><strong>Giriş Ekranı</strong></p>
-  </div>
-  <div style="flex: 0 0 45%; max-width: 45%; text-align: center">
-    <img src="/static/images/aboot-page.png" alt="Kullanıcı Detayları" style="width: 100%; border-radius: 5px;">
-    <p><strong>Kullanıcı Detayları Sayfası</strong></p>
-  </div>
-  <div style="flex: 0 0 45%; max-width: 45%; text-align: center">
-    <img src="/static/images/All-transactions-made-page.png" alt="İşlem Geçmişi" style="width: 100%; border-radius: 5px;">
-    <p><strong>İşlem Geçmişi Sayfası</strong></p>
-  </div>
-  <div style="flex: 0 0 45%; max-width: 45%; text-align: center">
-    <img src="/static/images/user-home-page.png" alt="Giriş Sayfası" style="width: 100%; border-radius: 5px;">
-    <p><strong>Giriş Sayfası</strong></p>
-  </div>
-  <div style="flex: 0 0 45%; max-width: 45%; text-align: center">
-    <img src="/static/images/register.png" alt="Kayıt Ol Sayfası" style="width: 100%; border-radius: 5px;">
-    <p><strong>Kayıt Ol Sayfası</strong></p>
-  </div>
-  <div style="flex: 0 0 45%; max-width: 45%; text-align: center">
-    <img src="/static/images/user-home-page.png" alt="Dosya Normalizasyon Aracı" style="width: 100%; border-radius: 5px;">
-    <p><strong>Dosya Yükleme ve Normalizasyon Arayüzü</strong></p>
-  </div>
-  <div style="flex: 0 0 45%; max-width: 45%; text-align: center">
-    <img src="/static/images/aboot-page.png" alt="Veri Normalizasyon Algoritması" style="width: 100%; border-radius: 5px;">
-    <p><strong>Normalizasyon Algoritması Bilgi Sayfası</strong></p>
-  </div>
-  <div style="flex: 0 0 45%; max-width: 45%; text-align: center">
-    <img src="/static/images/admin-home-page.png" alt="Yönetici Paneli" style="width: 100%; border-radius: 5px;">
-    <p><strong>Yönetici Paneli - Kullanıcı Listesi</strong></p>
-  </div>
-</div>
+<table>
+  <tr>
+    <td width="50%"><img src="/static/images/login.png" alt="Giriş Ekranı"><br><strong>Giriş Ekranı</strong></td>
+    <td width="50%"><img src="/static/images/aboot-page.png" alt="Kullanıcı Detayları"><br><strong>Kullanıcı Detayları Sayfası</strong></td>
+  </tr>
+  <tr>
+    <td width="50%"><img src="/static/images/All-transactions-made-page.png" alt="İşlem Geçmişi"><br><strong>İşlem Geçmişi Sayfası</strong></td>
+    <td width="50%"><img src="/static/images/user-home-page.png" alt="Giriş Sayfası"><br><strong>Giriş Sayfası</strong></td>
+  </tr>
+  <tr>
+    <td width="50%"><img src="/static/images/register.png" alt="Kayıt Ol Sayfası"><br><strong>Kayıt Ol Sayfası</strong></td>
+    <td width="50%"><img src="/static/images/user-home-page.png" alt="Dosya Normalizasyon Aracı"><br><strong>Dosya Yükleme ve Normalizasyon Arayüzü</strong></td>
+  </tr>
+  <tr>
+    <td width="50%"><img src="/static/images/aboot-page.png" alt="Veri Normalizasyon Algoritması"><br><strong>Normalizasyon Algoritması Bilgi Sayfası</strong></td>
+    <td width="50%"><img src="/static/images/admin-home-page.png" alt="Yönetici Paneli"><br><strong>Yönetici Paneli - Kullanıcı Listesi</strong></td>
+  </tr>
+</table>
 ### ✨ Özellikler
 
 - **Akıllı Normalizasyon Algoritması**: Veri dağılımına göre optimize edilmiş normalizasyon tekniği seçimi
