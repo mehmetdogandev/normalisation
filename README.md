@@ -17,6 +17,32 @@ Bu projenin tanıtım videosunu izlemek için aşağıdaki bağlantıya tıklaya
 
 Bu proje, veri bilimi ve makine öğrenmesi projelerinde sıkça kullanılan normalizasyon işlemini otomatikleştiren bir web uygulamasıdır. Algoritma, veri setinizin dağılımını analiz ederek en uygun normalizasyon tekniğini seçer ve uygular.
 
+## 🖼️ Ekran Görüntüleri
+
+### Giriş Ekranı
+![Giriş Ekranı](/api/placeholder/400/320)
+
+### Kullanıcı Detayları Sayfası
+![Kullanıcı Detayları](/api/placeholder/400/320)
+
+### İşlem Geçmişi Sayfası
+![İşlem Geçmişi](/api/placeholder/400/320)
+
+### Giriş Sayfası
+![Giriş Sayfası](/api/placeholder/400/320)
+
+### Kayıt Ol Sayfası
+![Kayıt Ol Sayfası](/api/placeholder/400/320)
+
+### Dosya Yükleme ve Normalizasyon Arayüzü
+![Dosya Normalizasyon Aracı](/api/placeholder/400/320)
+
+### Normalizasyon Algoritması Bilgi Sayfası
+![Veri Normalizasyon Algoritması](/api/placeholder/400/320)
+
+### Yönetici Paneli - Kullanıcı Listesi
+![Yönetici Paneli](/api/placeholder/400/320)
+
 ### ✨ Özellikler
 
 - **Akıllı Normalizasyon Algoritması**: Veri dağılımına göre optimize edilmiş normalizasyon tekniği seçimi
@@ -123,6 +149,7 @@ normalisation/
 │   ├── uploads/            # Yüklenen dosyalar
 │   ├── new_csv/            # Normalize edilmiş dosyalar
 │   └── videos/             # Video dosyaları
+│   └── images/             # projeye ait arayüz görselleri
 └── templates/              # HTML şablonları
     ├── index.html          # Ana sayfa
     ├── login.html          # Giriş sayfası
@@ -141,6 +168,7 @@ Katkılarınızı bekliyoruz! Lütfen bir pull request göndermeden önce şunla
 3. Değişikliklerinizi commit edin (`git commit -m 'Add amazing feature'`)
 4. Branch'inizi push edin (`git push origin feature/amazing-feature`)
 5. Bir Pull Request açın
+
 ## 📞 İletişim
 
 Mehmet DOĞAN - [mehmetdogan.dev@gmail.com](mailto:mehmetdogan.dev@gmail.com)
