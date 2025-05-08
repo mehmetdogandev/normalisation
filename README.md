@@ -20,28 +20,28 @@ Bu proje, veri bilimi ve makine öğrenmesi projelerinde sıkça kullanılan nor
 ## 🖼️ Ekran Görüntüleri
 
 ### Giriş Ekranı
-![Giriş Ekranı](/api/placeholder/400/320)
+![Giriş Ekranı](/static/images/login.png)
 
 ### Kullanıcı Detayları Sayfası
-![Kullanıcı Detayları](/api/placeholder/400/320)
+![Kullanıcı Detayları](/static/images/aboot-page.png)
 
 ### İşlem Geçmişi Sayfası
-![İşlem Geçmişi](/api/placeholder/400/320)
+![İşlem Geçmişi](/static/images/All-transactions-made-page.png)
 
 ### Giriş Sayfası
-![Giriş Sayfası](/api/placeholder/400/320)
+![Giriş Sayfası](/static/images/user-home-page.png)
 
 ### Kayıt Ol Sayfası
-![Kayıt Ol Sayfası](/api/placeholder/400/320)
+![Kayıt Ol Sayfası](/static/images/register.png)
 
 ### Dosya Yükleme ve Normalizasyon Arayüzü
-![Dosya Normalizasyon Aracı](/api/placeholder/400/320)
+![Dosya Normalizasyon Aracı](/static/images/)
 
 ### Normalizasyon Algoritması Bilgi Sayfası
-![Veri Normalizasyon Algoritması](/api/placeholder/400/320)
+![Veri Normalizasyon Algoritması](/static/images/)
 
 ### Yönetici Paneli - Kullanıcı Listesi
-![Yönetici Paneli](/api/placeholder/400/320)
+![Yönetici Paneli](/static/images/)
 
 ### ✨ Özellikler
 
